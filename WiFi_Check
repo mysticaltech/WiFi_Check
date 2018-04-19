@@ -35,7 +35,7 @@
 # Where and what you want to call the Lockfile
 lockfile='/var/run/wifi_check.pid'
 # Which Interface do you want to check/fix
-wlan='wlp1s0f0u6u4'
+wlan='...'
 ##################################################################
 echo
 echo "Starting WiFi check for $wlan"
@@ -62,19 +62,19 @@ echo $$ > $lockfile
 
 # We can perform check
 echo "Performing Network check for $wlan"
-if ifconfig $wlan | grep -q "inet " ; then
+if /sbin/ifconfig $wlan | grep -q "inet " ; then
     echo "Network is Okay"
 else
     echo "Network connection down! Attempting reconnection."
-    ifdown $wlan
+    /sbin/ifdown $wlan
     sleep 5
-    ifup --force $wlan
-    ifconfig $wlan | grep "inet "
+    /sbin/ifup --force $wlan
+    /sbin/ifconfig $wlan | grep "inet "
 fi
 
 echo
 echo "Current Setting:"
-ifconfig $wlan | grep "inet "
+/sbin/ifconfig $wlan | grep "inet "
 echo
 
 # Check is complete, Remove Lock file and exit

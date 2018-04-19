@@ -1,4 +1,4 @@
-#!/bin/bash
+!/bin/bash
 ##################################################################
 # A Project of TNET Services, Inc
 #
@@ -26,21 +26,21 @@
 #
 # Run Every 5 mins - Seems like ever min is over kill unless
 # this is a very common problem.  If once a min change */5 to *
-# once every 2 mins */5 to */2 ... 
+# once every 2 mins */5 to */2 ...
 #
-# */5 * * * * /usr/local/bin/WiFi_Check 
+# */5 * * * * /usr/local/bin/wifi_check
 #
 ##################################################################
 # Settings
 # Where and what you want to call the Lockfile
-lockfile='/var/run/WiFi_Check.pid'
+lockfile='/var/run/wifi_check.pid'
 # Which Interface do you want to check/fix
-wlan='wlan0'
+wlan='wlp1s0f0u6u4'
 ##################################################################
 echo
 echo "Starting WiFi check for $wlan"
 date
-echo 
+echo
 
 # Check to see if there is a lock file
 if [ -e $lockfile ]; then
@@ -62,21 +62,21 @@ echo $$ > $lockfile
 
 # We can perform check
 echo "Performing Network check for $wlan"
-if ifconfig $wlan | grep -q "inet addr:" ; then
+if ifconfig $wlan | grep -q "inet " ; then
     echo "Network is Okay"
 else
     echo "Network connection down! Attempting reconnection."
     ifdown $wlan
     sleep 5
     ifup --force $wlan
-    ifconfig $wlan | grep "inet addr"
+    ifconfig $wlan | grep "inet "
 fi
 
-echo 
-echo "Current Setting:"
-ifconfig $wlan | grep "inet addr:"
 echo
- 
+echo "Current Setting:"
+ifconfig $wlan | grep "inet "
+echo
+
 # Check is complete, Remove Lock file and exit
 #echo "process is complete, removing lockfile"
 rm $lockfile
